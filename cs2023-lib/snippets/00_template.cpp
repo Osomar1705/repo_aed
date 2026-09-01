@@ -1,6 +1,6 @@
-// 00_template.cpp - boilerplate de arranque. Copia esto y empieza a escribir.
+// 00_template.cpp - boilerplate de arranque (estilo curso CS2023). Copia y escribe.
 #include <bits/stdc++.h>
-using namespace std;
+using namespace std;   // el profe usa: using namespace::std;
 
 typedef long long ll;
 typedef unsigned long long ull;

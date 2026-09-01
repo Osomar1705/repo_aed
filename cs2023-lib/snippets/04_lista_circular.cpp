@@ -1,108 +1,109 @@
 // 04_lista_circular.cpp - lista circular simple (el ultimo apunta al primero).
-// Compila SOLO. Guardo solo 'tail'; tail->next es el head. Ideal round-robin.
+// Estilo del curso. Compila SOLO. Guardo solo 'tail'; tail->next es el head.
 #include <bits/stdc++.h>
 using namespace std;
 
-template <class T>
-struct ListaCircular {
-    struct Nodo {
-        T val;
-        Nodo* next;
-        Nodo(const T& v) : val(v), next(nullptr) {}
-    };
-    Nodo* tail;   // el ultimo; tail->next == head
-    int n;
+template <typename data_type>
+struct CListNode {
+    data_type data;
+    CListNode* next;
+    CListNode(data_type data) : data(data), next(nullptr) {}
+};
+
+template <typename data_type>
+struct CircularLinkedList {
+    CListNode<data_type>* tail;   // el ultimo; tail->next == head
+    int sz;
 
     // O(1) - lista vacia.
-    ListaCircular() : tail(nullptr), n(0) {}
+    CircularLinkedList() { tail = nullptr; sz = 0; }
     // O(n) - libero todo.
-    ~ListaCircular() { clear(); }
+    ~CircularLinkedList() { clear(); }
 
     // O(1) - cantidad de elementos.
-    int size() const { return n; }
+    int size() const { return sz; }
     // O(1) - true si esta vacia.
-    bool empty() const { return n == 0; }
+    bool empty() const { return tail == nullptr; }
     // O(1) - el primer nodo (o nullptr).
-    Nodo* head() const { return tail ? tail->next : nullptr; }
+    CListNode<data_type>* head() const { return tail ? tail->next : nullptr; }
 
     // O(1) - inserto al frente; si vacia, el nodo se apunta a si mismo.
-    void push_front(const T& v) {
-        Nodo* p = new Nodo(v);
-        if (!tail) { p->next = p; tail = p; }
-        else { p->next = tail->next; tail->next = p; }
-        n++;
+    void push_front(data_type value) {
+        CListNode<data_type>* new_node = new CListNode<data_type>(value);
+        if (!tail) { new_node->next = new_node; tail = new_node; }
+        else { new_node->next = tail->next; tail->next = new_node; }
+        ++sz;
     }
 
-    // O(1) - push_front y luego avanzo tail: el nuevo queda al final.
-    void push_back(const T& v) {
-        push_front(v);
-        tail = tail->next;   // el recien insertado (head) pasa a ser tail
+    // O(1) - push_front y avanzo tail: el nuevo queda al final.
+    void push_back(data_type value) {
+        push_front(value);
+        tail = tail->next;
     }
 
     // O(n) - busco el valor con puntero previo dando una vuelta; reconecto.
-    void erase(const T& v) {
+    void erase(data_type value) {
         if (!tail) return;
-        Nodo* prev = tail;
-        Nodo* cur = tail->next;
-        for (int i = 0; i < n; i++) {
-            if (cur->val == v) {
-                if (cur == tail && cur == tail->next) { // unico nodo
-                    tail = nullptr;
-                } else {
-                    prev->next = cur->next;
-                    if (cur == tail) tail = prev;
+        CListNode<data_type>* prev = tail;
+        CListNode<data_type>* current = tail->next;
+        for (int i = 0; i < sz; ++i) {
+            if (current->data == value) {
+                if (current == tail && current == tail->next) tail = nullptr; // unico
+                else {
+                    prev->next = current->next;
+                    if (current == tail) tail = prev;
                 }
-                delete cur;
-                n--;
+                delete current;
+                --sz;
                 return;
             }
-            prev = cur;
-            cur = cur->next;
+            prev = current;
+            current = current->next;
         }
     }
 
     // O(n) - primer nodo con ese valor dando una sola vuelta, o nullptr.
-    Nodo* buscar(const T& v) {
+    CListNode<data_type>* buscar(data_type value) {
         if (!tail) return nullptr;
-        Nodo* p = tail->next;
-        for (int i = 0; i < n; i++) {
-            if (p->val == v) return p;
+        CListNode<data_type>* p = tail->next;
+        for (int i = 0; i < sz; ++i) {
+            if (p->data == value) return p;
             p = p->next;
         }
         return nullptr;
     }
 
-    // O(k mod n) - avanzo k pasos desde p para round-robin (turnos).
-    Nodo* avanzar(Nodo* p, int k) {
-        if (!p || n == 0) return p;
-        k %= n;
+    // O(k mod sz) - avanzo k pasos desde p para round-robin (turnos).
+    CListNode<data_type>* avanzar(CListNode<data_type>* p, int k) {
+        if (!p || sz == 0) return p;
+        k %= sz;
         while (k--) p = p->next;
         return p;
     }
 
-    // O(n) - recorro exactamente una vuelta (n pasos), sin bucle infinito.
-    vector<T> una_vuelta() {
-        vector<T> r;
+    // O(n) - recorro exactamente una vuelta (sz pasos), sin bucle infinito.
+    vector<data_type> una_vuelta() {
+        vector<data_type> r;
         if (!tail) return r;
-        Nodo* p = tail->next;
-        for (int i = 0; i < n; i++) { r.push_back(p->val); p = p->next; }
+        CListNode<data_type>* p = tail->next;
+        for (int i = 0; i < sz; ++i) { r.push_back(p->data); p = p->next; }
         return r;
     }
 
-    // O(n) - guardo head, rompo el circulo, y libero linealmente; sin loop infinito.
+    // O(n) - guardo head, rompo el circulo y libero lineal; sin loop infinito.
     void clear() {
         if (!tail) return;
-        Nodo* p = tail->next;      // head
-        tail->next = nullptr;      // rompo el circulo antes de recorrer
-        while (p) { Nodo* nx = p->next; delete p; p = nx; }
+        CListNode<data_type>* p = tail->next;  // head
+        tail->next = nullptr;                  // rompo el circulo antes de recorrer
+        while (p) { CListNode<data_type>* nx = p->next; delete p; p = nx; }
         tail = nullptr;
-        n = 0;
+        sz = 0;
     }
 };
 
 #ifdef LOCAL_MAIN
 int main() {
-    ListaCircular<int> C;
+    CircularLinkedList<int> C;
     C.push_back(1); C.push_back(2); C.push_back(3);
     for (int x : C.una_vuelta()) cout << x << ' ';
     cout << '\n';

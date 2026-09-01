@@ -1,17 +1,22 @@
 # cs2023-lib — Listas (examen Codeforces)
 
-Copia-pega bajo presión. Cada archivo de `snippets/` compila **solo**, sin depender de los demás. C++17, punteros crudos.
+Copia-pega bajo presión. Cada archivo de `snippets/` compila **solo**, sin depender de los demás. C++17, punteros crudos. Basado en el material del curso CS2023 (Sem3 Listas, prof. V. Racsó Galván).
+
+**Nomenclatura del curso** (para que coincida con lo visto en clase):
+- Lista simple: `LinkedNode<T>` / `LinkedList<T>`, campo `data`, con `head` y `tail`.
+- `insert(node, v)` inserta **después** de `node`; `erase(node)` borra el nodo **siguiente** a `node` (¡ojo con esta convención!). También hay `insert(k,v)` / `erase(k)` 0-indexed.
+- Problemas tipo CF/LeetCode: `struct ListNode { int val; ListNode* next; }`.
 
 ## 1. ¿Qué archivo abro?
 
 | Me piden… | Archivo |
 |---|---|
-| Arranque rápido (includes, main, typedefs) | `00_template.cpp` |
-| Arreglo dinámico propio (como vector) | `01_vector.cpp` |
-| Lista enlazada simple completa / `struct Nodo` suelto | `02_lista_simple.cpp` |
+| Arranque rápido (includes, main, fast I/O) | `00_template.cpp` |
+| Arreglo dinámico propio (`Vector<T>`, sz/cap/data) | `01_vector.cpp` |
+| Lista enlazada simple completa / `ListNode` suelto | `02_lista_simple.cpp` |
 | Lista doble, borrar por puntero en O(1), recorrer al revés | `03_lista_doble.cpp` |
 | Round-robin, turnos, buffer circular | `04_lista_circular.cpp` |
-| **Truco sobre `Nodo` (reverse, ciclo, merge, k-ésimo…)** | `05_patrones_lista.cpp` |
+| **Trucos sobre `ListNode` (reverse, ciclo, merge, k-ésimo…)** | `05_patrones_lista.cpp` |
 | Leer/imprimir/convertir listas | `06_io_listas.cpp` |
 
 ## 2. Arreglo/Vector vs Lista simple vs Lista doble

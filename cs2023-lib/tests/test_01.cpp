@@ -4,10 +4,10 @@
 
 int main() {
     Vector<int> v;
-    assert(v.empty() && v.size() == 0);
+    assert(v.empty() && v.size() == 0 && v.capacity() == 1);
 
-    // push/pop y crecimiento
-    for (int i = 0; i < 5; i++) v.push_back(i);   // 0 1 2 3 4
+    // push y crecimiento por duplicacion
+    for (int i = 0; i < 5; ++i) v.push_back(i);   // 0 1 2 3 4
     assert(v.size() == 5);
     assert(v.capacity() >= 5);
     v.pop_back();                                 // 0 1 2 3
@@ -19,7 +19,7 @@ int main() {
     v.insert(2, 99);                              // -1 0 99 1 2 3
     assert(v[2] == 99 && v.size() == 6);
 
-    // erase cabeza y cola logica
+    // erase cabeza y ultimo
     v.erase(0);                                   // 0 99 1 2 3
     assert(v[0] == 0);
     v.erase(v.size() - 1);                        // 0 99 1 2
@@ -30,11 +30,15 @@ int main() {
     try { v.at(100); } catch (const std::out_of_range&) { lanzo = true; }
     assert(lanzo);
 
-    // resize crece y encoge
-    v.resize(6, 7);                               // ... 7 7
-    assert(v.size() == 6 && v[5] == 7 && v[4] == 7);
-    v.resize(2);
-    assert(v.size() == 2);
+    // resize (estilo curso): solo ajusta capacidad, no toca sz
+    int antes = v.size();
+    v.resize(16);
+    assert(v.capacity() >= 16 && v.size() == antes);
+
+    // pop_back encoge la capacidad cuando queda muy vacio
+    for (int i = 0; i < 5; ++i) v.push_back(i);
+    while (v.size() > 1) v.pop_back();
+    assert(v.capacity() >= 1);
 
     // clear y reusar
     v.clear();

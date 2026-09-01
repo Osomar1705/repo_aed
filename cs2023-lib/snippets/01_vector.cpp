@@ -1,92 +1,95 @@
-// 01_vector.cpp - Vector<T> con crecimiento por duplicacion (arreglo dinamico).
-// Compila SOLO. Prohibido usar std::vector en la implementacion.
+// 01_vector.cpp - Vector<T> dinamico, estilo del curso (sz/cap/data, resize con shifts).
+// Base: semana2/vector.cpp del profe. Compila SOLO. Prohibido std::vector adentro.
 #include <bits/stdc++.h>
 using namespace std;
 
-template <class T>
+template <typename T>
 struct Vector {
-    T* a;          // arreglo crudo
-    int n;         // cantidad de elementos
-    int cap;       // capacidad reservada
+    int sz;      // cantidad de elementos
+    int cap;     // capacidad reservada
+    T* data;     // bloque crudo
 
-    // O(1) - arranco vacio, sin reservar memoria todavia.
-    Vector() : a(nullptr), n(0), cap(0) {}
+    // O(1) - arranco con capacidad 1, como en clase.
+    Vector() { sz = 0; cap = 1; data = new T[1]; }
 
-    // O(n) - libero el bloque crudo al destruir.
-    ~Vector() { delete[] a; }
+    // O(n) - libero el bloque.
+    ~Vector() { delete[] data; }
 
-    // O(1) - cantidad actual de elementos.
-    int size() const { return n; }
-    // O(1) - capacidad reservada, no la cantidad usada.
+    // O(1) - cantidad de elementos.
+    int size() const { return sz; }
+    // O(1) - capacidad reservada.
     int capacity() const { return cap; }
-    // O(1) - true si no hay elementos.
-    bool empty() const { return n == 0; }
+    // O(1) - true si esta vacio.
+    bool empty() const { return sz == 0; }
 
-    // O(n) - reservo nuevo bloque y copio; solo crece, nunca encoge aqui.
-    void reserve(int c) {
-        if (c <= cap) return;
-        T* b = new T[c];
-        for (int i = 0; i < n; i++) b[i] = a[i];
-        delete[] a;
-        a = b;
-        cap = c;
+    // O(n) - reservo la potencia de 2 justa para 'len' (crece o decrece) y copio.
+    void resize(int len) {
+        int new_cap = cap;
+        while (new_cap < len) new_cap <<= 1;                       // crecer
+        while (new_cap >= 2 && (new_cap >> 1) >= len) new_cap >>= 1; // decrecer
+        if (new_cap == cap) return;
+        T* new_data = new T[new_cap];
+        for (int i = 0; i < sz; ++i) new_data[i] = data[i];
+        delete[] data;
+        data = new_data;
+        cap = new_cap;
     }
 
-    // O(1) amortizado - si esta lleno duplico capacidad, luego escribo al final.
-    void push_back(const T& x) {
-        if (n == cap) reserve(cap ? cap * 2 : 1);
-        a[n++] = x;
+    // O(1) amortizado - si esta lleno duplico y luego escribo al final.
+    void push_back(T value) {
+        if (sz == cap) resize(2 * cap);
+        data[sz++] = value;
     }
 
-    // O(1) - solo bajo el contador; no reduzco capacidad.
+    // O(1) amortizado - bajo el contador; encojo si quedo muy vacio (cap/4).
     void pop_back() {
-        if (n > 0) n--;
+        if (sz == 0) return;
+        --sz;
+        if (cap > 1 && sz <= cap / 4) resize(cap / 2);
     }
 
-    // O(n) - corro a la derecha desde el final para abrir hueco en pos.
-    void insert(int pos, const T& x) {
-        if (pos < 0 || pos > n) return;
-        if (n == cap) reserve(cap ? cap * 2 : 1);
-        for (int i = n; i > pos; i--) a[i] = a[i - 1];
-        a[pos] = x;
-        n++;
+    // O(n) - corro a la derecha para abrir hueco en pos.
+    void insert(int pos, T value) {
+        if (pos < 0 || pos > sz) return;
+        if (sz == cap) resize(2 * cap);
+        for (int i = sz; i > pos; --i) data[i] = data[i - 1];
+        data[pos] = value;
+        ++sz;
     }
 
     // O(n) - corro a la izquierda para tapar el hueco en pos.
     void erase(int pos) {
-        if (pos < 0 || pos >= n) return;
-        for (int i = pos; i + 1 < n; i++) a[i] = a[i + 1];
-        n--;
+        if (pos < 0 || pos >= sz) return;
+        for (int i = pos; i + 1 < sz; ++i) data[i] = data[i + 1];
+        --sz;
     }
 
     // O(1) - acceso directo por indice, sin chequeo.
-    T& operator[](int i) { return a[i]; }
-    const T& operator[](int i) const { return a[i]; }
+    T& operator[](const int& idx) const { return data[idx]; }
 
-    // O(1) - acceso con chequeo; lanza si el indice se sale.
-    T& at(int i) {
-        if (i < 0 || i >= n) throw out_of_range("Vector::at");
-        return a[i];
+    // O(1) - acceso con chequeo; lanza si se sale.
+    T& at(int idx) {
+        if (idx < 0 || idx >= sz) throw out_of_range("Vector::at");
+        return data[idx];
     }
 
-    // O(1) - vacio logicamente; conservo el bloque para reusar capacidad.
-    void clear() { n = 0; }
-
-    // O(n) - ajusto tamaño; si crece, reservo y relleno con def.
-    void resize(int m, const T& def = T()) {
-        if (m > cap) reserve(m);
-        for (int i = n; i < m; i++) a[i] = def;
-        n = m;
-    }
+    // O(1) - vacio logicamente (conservo el bloque).
+    void clear() { sz = 0; }
 };
+
+// O(n) - imprime separado por espacios y salto final (truco " \n"[...] del curso).
+void print(Vector<int>& a) {
+    for (int i = 0; i < a.size(); ++i) cout << a[i] << " \n"[i + 1 == a.size()];
+}
 
 #ifdef LOCAL_MAIN
 int main() {
-    Vector<int> v;
-    for (int i = 0; i < 5; i++) v.push_back(i);
-    v.insert(0, -1);
-    v.erase(3);
-    for (int i = 0; i < v.size(); i++) cout << v[i] << " \n"[i + 1 == v.size()];
+    cin.tie(0)->sync_with_stdio(false);
+    Vector<int> a;
+    for (int i = 0; i < 5; ++i) a.push_back(i);
+    a.insert(0, -1);
+    a.erase(3);
+    print(a);
     return 0;
 }
 #endif
