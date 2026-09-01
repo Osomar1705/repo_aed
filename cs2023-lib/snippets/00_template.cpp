@@ -1,6 +1,6 @@
-// 00_template.cpp - boilerplate de arranque (estilo curso CS2023). Copia y escribe.
+// mi base para arrancar rapido: includes, fast IO y main listo
 #include <bits/stdc++.h>
-using namespace std;   // el profe usa: using namespace::std;
+using namespace std;
 
 typedef long long ll;
 typedef unsigned long long ull;

@@ -1,5 +1,4 @@
-// 04_lista_circular.cpp - lista circular simple (el ultimo apunta al primero).
-// Estilo del curso. Compila SOLO. Guardo solo 'tail'; tail->next es el head.
+// lista circular: guardo solo tail y tail->next es el head. util para round-robin
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -15,19 +14,19 @@ struct CircularLinkedList {
     CListNode<data_type>* tail;   // el ultimo; tail->next == head
     int sz;
 
-    // O(1) - lista vacia.
+    // O(1)
     CircularLinkedList() { tail = nullptr; sz = 0; }
-    // O(n) - libero todo.
+    // O(n)
     ~CircularLinkedList() { clear(); }
 
-    // O(1) - cantidad de elementos.
+    // O(1)
     int size() const { return sz; }
-    // O(1) - true si esta vacia.
+    // O(1)
     bool empty() const { return tail == nullptr; }
-    // O(1) - el primer nodo (o nullptr).
+    // O(1)
     CListNode<data_type>* head() const { return tail ? tail->next : nullptr; }
 
-    // O(1) - inserto al frente; si vacia, el nodo se apunta a si mismo.
+    // O(1)
     void push_front(data_type value) {
         CListNode<data_type>* new_node = new CListNode<data_type>(value);
         if (!tail) { new_node->next = new_node; tail = new_node; }
@@ -35,13 +34,13 @@ struct CircularLinkedList {
         ++sz;
     }
 
-    // O(1) - push_front y avanzo tail: el nuevo queda al final.
+    // O(1)
     void push_back(data_type value) {
         push_front(value);
         tail = tail->next;
     }
 
-    // O(n) - busco el valor con puntero previo dando una vuelta; reconecto.
+    // O(n)
     void erase(data_type value) {
         if (!tail) return;
         CListNode<data_type>* prev = tail;
@@ -62,7 +61,7 @@ struct CircularLinkedList {
         }
     }
 
-    // O(n) - primer nodo con ese valor dando una sola vuelta, o nullptr.
+    // O(n)
     CListNode<data_type>* buscar(data_type value) {
         if (!tail) return nullptr;
         CListNode<data_type>* p = tail->next;
@@ -73,7 +72,7 @@ struct CircularLinkedList {
         return nullptr;
     }
 
-    // O(k mod sz) - avanzo k pasos desde p para round-robin (turnos).
+    // O(k mod sz)
     CListNode<data_type>* avanzar(CListNode<data_type>* p, int k) {
         if (!p || sz == 0) return p;
         k %= sz;
@@ -81,7 +80,7 @@ struct CircularLinkedList {
         return p;
     }
 
-    // O(n) - recorro exactamente una vuelta (sz pasos), sin bucle infinito.
+    // O(n)
     vector<data_type> una_vuelta() {
         vector<data_type> r;
         if (!tail) return r;
@@ -90,7 +89,7 @@ struct CircularLinkedList {
         return r;
     }
 
-    // O(n) - guardo head, rompo el circulo y libero lineal; sin loop infinito.
+    // O(n)
     void clear() {
         if (!tail) return;
         CListNode<data_type>* p = tail->next;  // head

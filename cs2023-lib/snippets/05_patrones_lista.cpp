@@ -1,6 +1,4 @@
-// 05_patrones_lista.cpp - EL ARCHIVO CLAVE. Funciones sueltas sobre ListNode.
-// Cada una es autocontenida y lista para pegar. Compila SOLO.
-// Convencion: 'val' int, listas terminadas en nullptr (salvo las de ciclo).
+// mis patrones de listas para CF: cada funcion es suelta, busco por [TAG] con Ctrl+F
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -15,7 +13,7 @@ struct ListNode {
 // Ojo: guarda next ANTES de reasignar cur->next o pierdes el resto.
 ListNode* reverse_it(ListNode* head) {
     ListNode* prev = nullptr;
-    while (head) {                 // O(n) - una pasada reasignando punteros
+    while (head) {                 // O(n)
         ListNode* nx = head->next;
         head->next = prev;
         prev = head;
@@ -39,7 +37,7 @@ ListNode* reverse_rec(ListNode* head) {
 // Cuando: invertir solo el segmento entre posiciones m..n (1-indexado).
 // Ojo: usa dummy para el caso m==1; conecta bien los tres tramos.
 ListNode* reverse_between(ListNode* head, int m, int n) {
-    ListNode dummy(0); dummy.next = head;               // O(n) - una pasada
+    ListNode dummy(0); dummy.next = head;               // O(n)
     ListNode* pre = &dummy;
     for (int i = 1; i < m; i++) pre = pre->next;     // nodo antes del tramo
     ListNode* cur = pre->next;                           // primero del tramo

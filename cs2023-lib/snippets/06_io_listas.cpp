@@ -1,4 +1,4 @@
-// 06_io_listas.cpp - utilidades de entrada/salida sobre ListNode. Compila SOLO.
+// utilidades para leer, imprimir y convertir listas (sobre ListNode)
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -8,7 +8,7 @@ struct ListNode {
     ListNode(int v) : val(v), next(nullptr) {}
 };
 
-// O(n) - leo n enteros de cin y construyo la lista en orden de lectura.
+// O(n)
 // Ojo: uso tail para pegar en O(1); si n==0 devuelvo nullptr.
 ListNode* leer_lista(int n) {
     ListNode dummy(0);
@@ -21,7 +21,7 @@ ListNode* leer_lista(int n) {
     return dummy.next;
 }
 
-// O(n) - construyo la lista a partir de un vector, mismo orden.
+// O(n)
 ListNode* desde_vector(const vector<int>& v) {
     ListNode dummy(0);
     ListNode* t = &dummy;
@@ -29,7 +29,7 @@ ListNode* desde_vector(const vector<int>& v) {
     return dummy.next;
 }
 
-// O(n) - imprimo separada por espacios y salto de linea final.
+// O(n)
 void imprimir(ListNode* head) {
     bool first = true;
     for (ListNode* p = head; p; p = p->next) {
@@ -40,14 +40,14 @@ void imprimir(ListNode* head) {
     cout << '\n';
 }
 
-// O(n) - vuelco la lista a un vector para procesar comodo.
+// O(n)
 vector<int> a_vector(ListNode* head) {
     vector<int> r;
     for (ListNode* p = head; p; p = p->next) r.push_back(p->val);
     return r;
 }
 
-// O(n) - libero la lista (util para no dejar fugas en pruebas locales).
+// O(n)
 void liberar(ListNode* head) {
     while (head) { ListNode* nx = head->next; delete head; head = nx; }
 }

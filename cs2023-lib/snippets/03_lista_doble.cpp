@@ -1,5 +1,4 @@
-// 03_lista_doble.cpp - lista doblemente enlazada, estilo del curso. Compila SOLO.
-// Ventaja clave: erase(node) en O(1) real y recorrido en ambos sentidos.
+// lista doble; lo bueno es borrar por puntero en O(1) y recorrer al reves
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -17,17 +16,17 @@ struct DoublyLinkedList {
     DListNode<data_type>* tail;
     int sz;
 
-    // O(1) - lista vacia.
+    // O(1)
     DoublyLinkedList() { head = tail = nullptr; sz = 0; }
-    // O(n) - libero todo.
+    // O(n)
     ~DoublyLinkedList() { clear(); }
 
-    // O(1) - cantidad de elementos.
+    // O(1)
     int size() const { return sz; }
-    // O(1) - true si esta vacia.
+    // O(1)
     bool empty() const { return head == nullptr; }
 
-    // O(1) - nuevo nodo al frente enlazando prev/next.
+    // O(1)
     void push_front(data_type value) {
         DListNode<data_type>* new_node = new DListNode<data_type>(value);
         new_node->next = head;
@@ -37,7 +36,7 @@ struct DoublyLinkedList {
         ++sz;
     }
 
-    // O(1) - nuevo nodo al final usando tail.
+    // O(1)
     void push_back(data_type value) {
         DListNode<data_type>* new_node = new DListNode<data_type>(value);
         new_node->prev = tail;
@@ -47,7 +46,7 @@ struct DoublyLinkedList {
         ++sz;
     }
 
-    // O(1) - saco la cabeza y reengancho.
+    // O(1)
     void pop_front() {
         if (!head) return;
         DListNode<data_type>* current = head;
@@ -58,7 +57,7 @@ struct DoublyLinkedList {
         --sz;
     }
 
-    // O(1) - saco la cola y reengancho.
+    // O(1)
     void pop_back() {
         if (!tail) return;
         DListNode<data_type>* current = tail;
@@ -69,7 +68,7 @@ struct DoublyLinkedList {
         --sz;
     }
 
-    // O(1) - inserto value justo ANTES de node; borde: node == head.
+    // O(1)
     void insert_before(DListNode<data_type>* node, data_type value) {
         if (!node) return;
         DListNode<data_type>* new_node = new DListNode<data_type>(value);
@@ -81,7 +80,7 @@ struct DoublyLinkedList {
         ++sz;
     }
 
-    // O(1) - inserto value justo DESPUES de node; borde: node == tail.
+    // O(1)
     void insert_after(DListNode<data_type>* node, data_type value) {
         if (!node) return;
         DListNode<data_type>* new_node = new DListNode<data_type>(value);
@@ -93,7 +92,7 @@ struct DoublyLinkedList {
         ++sz;
     }
 
-    // O(1) real - con prev y next reconecto sin recorrer nada.
+    // O(1) real
     void erase(DListNode<data_type>* node) {
         if (!node) return;
         if (node->prev) node->prev->next = node->next;
@@ -104,14 +103,14 @@ struct DoublyLinkedList {
         --sz;
     }
 
-    // O(n) - primer nodo con ese valor, o nullptr.
+    // O(n)
     DListNode<data_type>* buscar(data_type value) {
         for (DListNode<data_type>* p = head; p; p = p->next)
             if (p->data == value) return p;
         return nullptr;
     }
 
-    // O(k) - nodo en posicion k (0-indexed); arranco por el lado mas cercano.
+    // O(k)
     DListNode<data_type>* at(int k) {
         if (k < 0 || k >= sz) return nullptr;
         if (k <= sz / 2) {
@@ -125,21 +124,21 @@ struct DoublyLinkedList {
         return p;
     }
 
-    // O(n) - vuelco recorriendo de head a tail.
+    // O(n)
     vector<data_type> hacia_adelante() {
         vector<data_type> r;
         for (DListNode<data_type>* p = head; p; p = p->next) r.push_back(p->data);
         return r;
     }
 
-    // O(n) - vuelco recorriendo de tail a head (orden inverso).
+    // O(n)
     vector<data_type> hacia_atras() {
         vector<data_type> r;
         for (DListNode<data_type>* p = tail; p; p = p->prev) r.push_back(p->data);
         return r;
     }
 
-    // O(n) - libero nodo por nodo; queda vacia y reusable.
+    // O(n)
     void clear() {
         DListNode<data_type>* current = head;
         while (current) { DListNode<data_type>* nx = current->next; delete current; current = nx; }

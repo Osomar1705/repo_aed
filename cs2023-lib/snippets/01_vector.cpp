@@ -1,5 +1,4 @@
-// 01_vector.cpp - Vector<T> dinamico, estilo del curso (sz/cap/data, resize con shifts).
-// Base: semana2/vector.cpp del profe. Compila SOLO. Prohibido std::vector adentro.
+// vector dinamico propio (sz/cap/data), como el de clase. sin std::vector
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -9,20 +8,20 @@ struct Vector {
     int cap;     // capacidad reservada
     T* data;     // bloque crudo
 
-    // O(1) - arranco con capacidad 1, como en clase.
+    // O(1)
     Vector() { sz = 0; cap = 1; data = new T[1]; }
 
-    // O(n) - libero el bloque.
+    // O(n)
     ~Vector() { delete[] data; }
 
-    // O(1) - cantidad de elementos.
+    // O(1)
     int size() const { return sz; }
-    // O(1) - capacidad reservada.
+    // O(1)
     int capacity() const { return cap; }
-    // O(1) - true si esta vacio.
+    // O(1)
     bool empty() const { return sz == 0; }
 
-    // O(n) - reservo la potencia de 2 justa para 'len' (crece o decrece) y copio.
+    // O(n)
     void resize(int len) {
         int new_cap = cap;
         while (new_cap < len) new_cap <<= 1;                       // crecer
@@ -35,20 +34,20 @@ struct Vector {
         cap = new_cap;
     }
 
-    // O(1) amortizado - si esta lleno duplico y luego escribo al final.
+    // O(1) amortizado
     void push_back(T value) {
         if (sz == cap) resize(2 * cap);
         data[sz++] = value;
     }
 
-    // O(1) amortizado - bajo el contador; encojo si quedo muy vacio (cap/4).
+    // O(1) amortizado
     void pop_back() {
         if (sz == 0) return;
         --sz;
         if (cap > 1 && sz <= cap / 4) resize(cap / 2);
     }
 
-    // O(n) - corro a la derecha para abrir hueco en pos.
+    // O(n)
     void insert(int pos, T value) {
         if (pos < 0 || pos > sz) return;
         if (sz == cap) resize(2 * cap);
@@ -57,27 +56,27 @@ struct Vector {
         ++sz;
     }
 
-    // O(n) - corro a la izquierda para tapar el hueco en pos.
+    // O(n)
     void erase(int pos) {
         if (pos < 0 || pos >= sz) return;
         for (int i = pos; i + 1 < sz; ++i) data[i] = data[i + 1];
         --sz;
     }
 
-    // O(1) - acceso directo por indice, sin chequeo.
+    // O(1)
     T& operator[](const int& idx) const { return data[idx]; }
 
-    // O(1) - acceso con chequeo; lanza si se sale.
+    // O(1)
     T& at(int idx) {
         if (idx < 0 || idx >= sz) throw out_of_range("Vector::at");
         return data[idx];
     }
 
-    // O(1) - vacio logicamente (conservo el bloque).
+    // O(1)
     void clear() { sz = 0; }
 };
 
-// O(n) - imprime separado por espacios y salto final (truco " \n"[...] del curso).
+// O(n)
 void print(Vector<int>& a) {
     for (int i = 0; i < a.size(); ++i) cout << a[i] << " \n"[i + 1 == a.size()];
 }

@@ -1,5 +1,4 @@
-// 02_lista_simple.cpp - lista enlazada simple, estilo del curso.
-// Base: semana3/contest/profe1.cpp. Compila SOLO. Prohibido std::list / forward_list.
+// lista simple: LinkedList completa + ListNode suelto para CF. sin std::list
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -22,17 +21,17 @@ struct LinkedList {
     LinkedNode<data_type>* tail;
     int sz;
 
-    // O(1) - lista vacia.
+    // O(1)
     LinkedList() { head = tail = nullptr; sz = 0; }
-    // O(n) - libero todos los nodos.
+    // O(n)
     ~LinkedList() { clear(); }
 
-    // O(1) - cantidad de elementos.
+    // O(1)
     int size() const { return sz; }
-    // O(1) - true si esta vacia.
+    // O(1)
     bool empty() const { return head == nullptr; }
 
-    // O(1) - nuevo nodo al frente; si vacia, tambien es tail.
+    // O(1)
     void push_front(data_type value) {
         LinkedNode<data_type>* new_node = new LinkedNode<data_type>(value, head);
         if (head == nullptr) tail = new_node;
@@ -40,14 +39,14 @@ struct LinkedList {
         ++sz;
     }
 
-    // O(1) - engancho al final usando tail; sin recorrer.
+    // O(1)
     void push_back(data_type value) {
         if (tail == nullptr) head = tail = new LinkedNode<data_type>(value);
         else { tail->next = new LinkedNode<data_type>(value); tail = tail->next; }
         ++sz;
     }
 
-    // O(1) - inserto DESPUES del nodo dado (node != nullptr); ajusto tail.
+    // O(1)
     void insert(LinkedNode<data_type>* node, data_type value) {
         LinkedNode<data_type>* new_node = new LinkedNode<data_type>(value, node->next);
         if (node == tail) tail = new_node;
@@ -55,7 +54,7 @@ struct LinkedList {
         ++sz;
     }
 
-    // O(k) - inserto value como el k-esimo (0-indexed) recorriendo hasta k-1.
+    // O(k)
     void insert(int k, data_type value) {
         if (k == 0) { push_front(value); return; }
         LinkedNode<data_type>* current = head;
@@ -63,7 +62,7 @@ struct LinkedList {
         insert(current, value);
     }
 
-    // O(1) - saco la cabeza; si queda vacia, tail a nullptr.
+    // O(1)
     void pop_front() {
         if (!head) return;
         LinkedNode<data_type>* current = head;
@@ -73,7 +72,7 @@ struct LinkedList {
         --sz;
     }
 
-    // O(1) - elimino el nodo SIGUIENTE a node; ajusto tail. Convencion del profe.
+    // O(1)
     void erase(LinkedNode<data_type>* node) {
         if (node && node->next) {
             LinkedNode<data_type>* current = node->next;
@@ -84,7 +83,7 @@ struct LinkedList {
         }
     }
 
-    // O(k) - elimino el k-esimo (0-indexed) recorriendo hasta el previo.
+    // O(k)
     void erase(int k) {
         if (k == 0) { pop_front(); return; }
         LinkedNode<data_type>* current = head;
@@ -92,7 +91,7 @@ struct LinkedList {
         erase(current);
     }
 
-    // O(n) - elimino el primer nodo cuyo data == value (busco con previo).
+    // O(n)
     void erase_value(data_type value) {
         LinkedNode<data_type>* prev = nullptr;
         LinkedNode<data_type>* current = head;
@@ -105,14 +104,14 @@ struct LinkedList {
         --sz;
     }
 
-    // O(n) - primer nodo con ese valor, o nullptr.
+    // O(n)
     LinkedNode<data_type>* buscar(data_type value) {
         for (LinkedNode<data_type>* p = head; p; p = p->next)
             if (p->data == value) return p;
         return nullptr;
     }
 
-    // O(k) - nodo en la posicion k (0-indexed), o nullptr si se sale.
+    // O(k)
     LinkedNode<data_type>* at(int k) {
         if (k < 0 || k >= sz) return nullptr;
         LinkedNode<data_type>* current = head;
@@ -120,7 +119,7 @@ struct LinkedList {
         return current;
     }
 
-    // O(n) - invierto punteros in-place; tail pasa a ser la vieja cabeza.
+    // O(n)
     void reverse() {
         LinkedNode<data_type>* prev = nullptr;
         LinkedNode<data_type>* current = head;
@@ -134,14 +133,14 @@ struct LinkedList {
         head = prev;
     }
 
-    // O(n) - imprimo separado por espacios (print() del curso).
+    // O(n)
     void print() {
         LinkedNode<data_type>* current = head;
         while (current != nullptr) { cout << current->data << " "; current = current->next; }
         cout << '\n';
     }
 
-    // O(n) - libero nodo por nodo; queda vacia y reusable.
+    // O(n)
     void clear() {
         LinkedNode<data_type>* current = head;
         while (current) { LinkedNode<data_type>* nx = current->next; delete current; current = nx; }
