@@ -1,8 +1,12 @@
-# cs2023-lib — Listas y hash tables (examen Codeforces)
+# cs2023-lib
 
-Copia-pega bajo presión. Cada archivo de `snippets/` compila **solo** (la única excepción es `08_patrones_hash.cpp`, que incluye `07_hash_table.cpp`). C++17, punteros crudos. Basado en el material del curso CS2023 (Sem3 Listas y Sem5 Hash tables, prof. V. Racsó Galván).
+Listas y hash tables para copiar y pegar bajo presión. C++17, punteros crudos.
+Cada archivo de `snippets/` compila solo; la única excepción es
+`08_patrones_hash.cpp`, que incluye al `07_hash_table.cpp`.
 
-**Nomenclatura del curso** (para que coincida con lo visto en clase):
+Sigue la nomenclatura del curso (Sem3 Listas y Sem5 Hash tables, prof. V. Racsó Galván).
+
+Convenciones que hay que recordar:
 - Lista simple: `LinkedNode<T>` / `LinkedList<T>`, campo `data`, con `head` y `tail`.
 - `insert(node, v)` inserta **después** de `node`; `erase(node)` borra el nodo **siguiente** a `node` (¡ojo con esta convención!). También hay `insert(k,v)` / `erase(k)` 0-indexed.
 - Problemas tipo CF/LeetCode: `struct ListNode { int val; ListNode* next; }`.
@@ -16,10 +20,10 @@ Copia-pega bajo presión. Cada archivo de `snippets/` compila **solo** (la únic
 | Lista enlazada simple completa / `ListNode` suelto | `02_lista_simple.cpp` |
 | Lista doble, borrar por puntero en O(1), recorrer al revés | `03_lista_doble.cpp` |
 | Round-robin, turnos, buffer circular | `04_lista_circular.cpp` |
-| **Trucos sobre `ListNode` (reverse, ciclo, merge, k-ésimo…)** | `05_patrones_lista.cpp` |
+| Trucos sobre `ListNode` (reverse, ciclo, merge, k-ésimo) | `05_patrones_lista.cpp` |
 | Leer/imprimir/convertir listas | `06_io_listas.cpp` |
 | Hash table con chaining (`my_map<K,V>`) | `07_hash_table.cpp` |
-| **Trucos con hash table (frecuencias, two-sum, subarreglos…)** | `08_patrones_hash.cpp` |
+| Trucos con hash table (frecuencias, two-sum, subarreglos) | `08_patrones_hash.cpp` |
 
 ## 2. Arreglo/Vector vs Lista simple vs Lista doble
 
@@ -51,7 +55,7 @@ Copia-pega bajo presión. Cada archivo de `snippets/` compila **solo** (la únic
 
 ## 4. TAGs de hash table (Ctrl+F)
 
-`07_hash_table.cpp` — la estructura:
+La estructura, en `07_hash_table.cpp`:
 
 | TAG | Qué hace |
 |---|---|
@@ -63,7 +67,7 @@ Copia-pega bajo presión. Cada archivo de `snippets/` compila **solo** (la únic
 | `[HASH-STR]` | Hash polinomial sobre los caracteres. |
 | `[PRINT]` | Ver qué hay en cada cajón (depurar). |
 
-`08_patrones_hash.cpp` — los problemas:
+Los problemas, en `08_patrones_hash.cpp`:
 
 | TAG | Qué hace |
 |---|---|
@@ -74,16 +78,17 @@ Copia-pega bajo presión. Cada archivo de `snippets/` compila **solo** (la únic
 | `[MAS-REPE]` | El más repetido, desempate por orden de aparición. |
 | `[SUBARR-SUMA]` | Cuántos subarreglos suman exactamente S. |
 
-Elegir `m`: `m ≈ 2*n` cajones. Cajones de más no cuestan casi nada; de menos, las
-listas crecen y se vuelve O(n) → TLE.
+Elegir `m`: unos `2*n` cajones. Cajones de más no cuestan casi nada; de menos,
+las listas crecen y el O(1) se vuelve O(n).
 
-En contest de verdad: `unordered_map` con `reserve(2*n)`. `map` solo si necesitas
-las llaves **en orden**. `my_map` es para el curso y para entender qué hay adentro.
+En un contest de verdad va `unordered_map` con `reserve(2*n)`, o `map` si hacen
+falta las llaves en orden. `my_map` es para el curso y para entender qué hay
+adentro.
 
 ## 5. Errores típicos con hash tables
 
 1. **`operator[]` sin actualizar la posición tras insertar**: devuelve el elemento equivocado. Inserta al final y deja el índice apuntando ahí.
-2. **`_hash` no marcado `const`** llamado desde un método `const` (`has_key`) → ni compila.
+2. **`_hash` sin `const`** llamado desde un método `const` como `has_key`: ni compila.
 3. **Negativos**: `while (key > 0)` no entra y todos caen al cajón 0. Suma un `OFFSET` **al guardar y al consultar**, nunca en un solo lado.
 4. **Usar `M[x]` para consultar**: inserta la llave con valor 0 y el mapa crece solo. Para preguntar, `has_key(x)` (o `count(x)` en la STL).
 5. **`m` chico**: todo cae en pocos cajones y el O(1) se vuelve O(n).

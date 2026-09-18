@@ -1,56 +1,46 @@
-// mis patrones de hash table para CF: cada funcion es suelta, busco por [TAG] con Ctrl+F
-// Unico snippet que depende de otro: necesita my_map de 07_hash_table.cpp.
+// mis patrones con hash table para CF: busco por [TAG] con Ctrl+F. necesita el 07
 #define SIN_MAIN
 #include "07_hash_table.cpp"
 
-// El _hash solo entra con llaves > 0, asi que para negativos empujo todo
-// al lado positivo. Regla: el OFFSET se suma al guardar Y al consultar,
-// si lo olvidas en un lado nunca coinciden (asi perdi un contest).
+// El hash solo entra con llaves > 0. el OFFSET va al guardar Y al consultar.
 const long long OFFSET = 2e9;
 
 // [FREQ]
-// Cuando: contar ocurrencias y luego responder consultas "cuantas veces sale x".
-// Ojo: sin hash table serian O(n*q); asi es O(n+q). Consulta con has_key,
-// porque M[x] a secas insertaria la llave con 0.
+// Contar y responder consultas. sin tabla seria O(n*q), asi O(n+q).
 my_map<int, int> frecuencias(const vector<int>& a) {
-    my_map<int, int> f(2 * (int)a.size() + 1);        // O(n)
+    my_map<int, int> f(2 * (int)a.size() + 1);            // O(n)
     for (int x : a) ++f[x];
     return f;
 }
 int veces(my_map<int, int>& f, int x) {
-    return f.has_key(x) ? f[x] : 0;                   // O(1)
+    return f.has_key(x) ? f[x] : 0;                       // O(1), f[x] solo insertaria
 }
 
 // [DISTINTOS]
-// Cuando: cuantos valores distintos hay. La uso como SET: la llave es el dato
-// y el valor no importa.
-// Ojo: solo mencionar M[x] ya lo inserta, por eso size() es la respuesta.
+// La tabla como set: solo mencionar s[x] ya lo inserta.
 int contar_distintos(const vector<int>& a) {
-    my_map<int, int> s(2 * (int)a.size() + 1);        // O(n)
+    my_map<int, int> s(2 * (int)a.size() + 1);            // O(n)
     for (int x : a) s[x];
     return s.size();
 }
 
 // [PERMUT]
-// Cuando: b es una reordenacion de a? (anagrama de multiconjuntos)
-// Ojo: primer filtro gratis es el tamanho; luego cuento con a y descuento con b.
+// Cuento con a y descuento con b. el tamanho es el filtro gratis.
 bool es_permutacion(const vector<int>& a, const vector<int>& b) {
-    if (a.size() != b.size()) return false;           // O(n)
+    if (a.size() != b.size()) return false;               // O(n)
     my_map<int, int> f(2 * (int)a.size() + 1);
     for (int x : a) ++f[x];
     for (int x : b) {
-        if (!f.has_key(x) || f[x] == 0) return false; // sobra algo que no estaba
+        if (!f.has_key(x) || f[x] == 0) return false;
         --f[x];
     }
     return true;
 }
 
 // [TWO-SUM]
-// Cuando: existen dos elementos que sumen S.
-// Ojo: pregunto por el complemento ANTES de insertar x, asi no uso el mismo
-// elemento dos veces. Y el OFFSET va en los dos lados.
+// Pregunto por el complemento ANTES de insertar x, si no uso el mismo dos veces.
 bool hay_par_que_suma(const vector<long long>& a, long long S) {
-    my_map<long long, int> vistos(2 * (int)a.size() + 1);  // O(n)
+    my_map<long long, int> vistos(2 * (int)a.size() + 1); // O(n)
     for (long long x : a) {
         if (vistos.has_key(S - x + OFFSET)) return true;
         vistos[x + OFFSET] = 1;
@@ -59,11 +49,9 @@ bool hay_par_que_suma(const vector<long long>& a, long long S) {
 }
 
 // [MAS-REPE]
-// Cuando: la palabra que mas se repite; si empatan, la que aparecio primero.
-// Ojo: guardo el orden de aparicion aparte, porque la hash table NO tiene orden.
-// El > estricto es lo que hace que gane la primera.
+// La tabla no tiene orden, por eso guardo el orden de aparicion aparte.
 pair<string, int> mas_repetida(const vector<string>& v) {
-    my_map<string, int> f(2 * (int)v.size() + 1);     // O(total de letras)
+    my_map<string, int> f(2 * (int)v.size() + 1);         // O(total de letras)
     vector<string> orden;
     for (const string& s : v) {
         if (!f.has_key(s)) orden.push_back(s);
@@ -71,15 +59,13 @@ pair<string, int> mas_repetida(const vector<string>& v) {
     }
     string mejor; int maximo = 0;
     for (const string& s : orden)
-        if (f[s] > maximo) { maximo = f[s]; mejor = s; }
+        if (f[s] > maximo) { maximo = f[s]; mejor = s; }  // > estricto: gana la primera
     return {mejor, maximo};
 }
 
 // [SUBARR-SUMA]
-// Cuando: cuantos subarreglos suman exactamente S.
-// Ojo: prefijo[i] - prefijo[j] == S  <=>  busco prefijo[j] = prefijo[i] - S.
-// Arranco con la suma 0 vista una vez, si no pierdo los subarreglos que
-// empiezan en el indice 0.
+// pre[i] - pre[j] == S, o sea busco pre[j] = pre[i] - S.
+// El cnt[0] = 1 inicial cubre los subarreglos que empiezan en el indice 0.
 long long subarreglos_que_suman(const vector<long long>& a, long long S) {
     my_map<long long, long long> cnt(2 * (int)a.size() + 1);  // O(n)
     cnt[0 + OFFSET] = 1;
