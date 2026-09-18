@@ -1,6 +1,6 @@
-# cs2023-lib — Listas (examen Codeforces)
+# cs2023-lib — Listas y hash tables (examen Codeforces)
 
-Copia-pega bajo presión. Cada archivo de `snippets/` compila **solo**, sin depender de los demás. C++17, punteros crudos. Basado en el material del curso CS2023 (Sem3 Listas, prof. V. Racsó Galván).
+Copia-pega bajo presión. Cada archivo de `snippets/` compila **solo** (la única excepción es `08_patrones_hash.cpp`, que incluye `07_hash_table.cpp`). C++17, punteros crudos. Basado en el material del curso CS2023 (Sem3 Listas y Sem5 Hash tables, prof. V. Racsó Galván).
 
 **Nomenclatura del curso** (para que coincida con lo visto en clase):
 - Lista simple: `LinkedNode<T>` / `LinkedList<T>`, campo `data`, con `head` y `tail`.
@@ -18,6 +18,8 @@ Copia-pega bajo presión. Cada archivo de `snippets/` compila **solo**, sin depe
 | Round-robin, turnos, buffer circular | `04_lista_circular.cpp` |
 | **Trucos sobre `ListNode` (reverse, ciclo, merge, k-ésimo…)** | `05_patrones_lista.cpp` |
 | Leer/imprimir/convertir listas | `06_io_listas.cpp` |
+| Hash table con chaining (`my_map<K,V>`) | `07_hash_table.cpp` |
+| **Trucos con hash table (frecuencias, two-sum, subarreglos…)** | `08_patrones_hash.cpp` |
 
 ## 2. Arreglo/Vector vs Lista simple vs Lista doble
 
@@ -47,7 +49,48 @@ Copia-pega bajo presión. Cada archivo de `snippets/` compila **solo**, sin depe
 | `[PARTIR]` | Particionar por x, orden estable. |
 | `[MSORT]` | Merge sort sobre la lista, O(n log n). |
 
-## 4. Errores típicos con listas
+## 4. TAGs de hash table (Ctrl+F)
+
+`07_hash_table.cpp` — la estructura:
+
+| TAG | Qué hace |
+|---|---|
+| `[FIND-POS]` | Posición de la llave dentro de su cajón (base de todo lo demás). |
+| `[OP-BRACKET]` | `M[k]`: lee, escribe, e inserta si no existe. |
+| `[HAS-KEY]` | ¿Existe? Sin insertar. |
+| `[ERASE]` | Borrar en O(1) (swap con el último + pop_back). |
+| `[HASH-INT]` | Hash polinomial sobre los dígitos. |
+| `[HASH-STR]` | Hash polinomial sobre los caracteres. |
+| `[PRINT]` | Ver qué hay en cada cajón (depurar). |
+
+`08_patrones_hash.cpp` — los problemas:
+
+| TAG | Qué hace |
+|---|---|
+| `[FREQ]` | Contar ocurrencias y responder consultas en O(1). |
+| `[DISTINTOS]` | Cuántos valores distintos (la tabla como set). |
+| `[PERMUT]` | ¿Un arreglo es reordenación del otro? |
+| `[TWO-SUM]` | ¿Hay dos elementos que sumen S? |
+| `[MAS-REPE]` | El más repetido, desempate por orden de aparición. |
+| `[SUBARR-SUMA]` | Cuántos subarreglos suman exactamente S. |
+
+Elegir `m`: `m ≈ 2*n` cajones. Cajones de más no cuestan casi nada; de menos, las
+listas crecen y se vuelve O(n) → TLE.
+
+En contest de verdad: `unordered_map` con `reserve(2*n)`. `map` solo si necesitas
+las llaves **en orden**. `my_map` es para el curso y para entender qué hay adentro.
+
+## 5. Errores típicos con hash tables
+
+1. **`operator[]` sin actualizar la posición tras insertar**: devuelve el elemento equivocado. Inserta al final y deja el índice apuntando ahí.
+2. **`_hash` no marcado `const`** llamado desde un método `const` (`has_key`) → ni compila.
+3. **Negativos**: `while (key > 0)` no entra y todos caen al cajón 0. Suma un `OFFSET` **al guardar y al consultar**, nunca en un solo lado.
+4. **Usar `M[x]` para consultar**: inserta la llave con valor 0 y el mapa crece solo. Para preguntar, `has_key(x)` (o `count(x)` en la STL).
+5. **`m` chico**: todo cae en pocos cajones y el O(1) se vuelve O(n).
+6. **Desbordar el int en el hash**: falta el `1ll *` antes de la multiplicación.
+7. **Esperar orden**: la hash table no tiene orden. Si lo necesitas, guarda el orden de aparición aparte o usa `map`.
+
+## 6. Errores típicos con listas
 
 1. **Perder el head**: reasignas `head` sin guardar el nodo viejo → se pierde toda la lista. Guarda `nx = p->next` antes de tocar punteros.
 2. **No usar dummy head**: borrar/insertar en la cabeza se vuelve un caso especial feo. Un `Nodo dummy; dummy.next = head;` lo unifica.

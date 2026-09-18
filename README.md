@@ -25,8 +25,10 @@ Reference implementations written to be read, not just to compile — each file 
 | `04_lista_circular.cpp` | Circular list |
 | `05_patrones_lista.cpp` | Recurring list patterns (traversal, insertion, deletion, reversal) |
 | `06_io_listas.cpp` | Reading and printing lists |
+| `07_hash_table.cpp` | Hash table with chaining (`my_map<K,V>`) |
+| `08_patrones_hash.cpp` | Recurring hash-table patterns (frequencies, two-sum, subarray sums) |
 
-`tests/test_01.cpp` … `test_05.cpp` exercise the corresponding snippets.
+`tests/test_01.cpp` … `test_07.cpp` exercise the corresponding snippets.
 
 ---
 
@@ -43,7 +45,7 @@ make clean
 
 ## 🇪🇸 En español
 
-Librería de referencia para el curso **CS2023 – Algoritmos y Estructuras de Datos**. Cada snippet es autocontenido y está escrito para *leerse*, no solo para compilar: vector dinámico, lista simple, doble y circular, patrones recurrentes de recorrido/inserción/borrado, y entrada-salida de listas.
+Librería de referencia para el curso **CS2023 – Algoritmos y Estructuras de Datos**. Cada snippet es autocontenido y está escrito para *leerse*, no solo para compilar: vector dinámico, lista simple, doble y circular, patrones recurrentes de recorrido/inserción/borrado, entrada-salida de listas, y tabla hash con encadenamiento junto a sus patrones de contest.
 
 Cada snippet tiene su test correspondiente en `tests/`. Todo se compila con `make` desde `cs2023-lib/`.
 

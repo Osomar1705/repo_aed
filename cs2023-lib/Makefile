@@ -1,7 +1,7 @@
 CXX      := g++
 CXXFLAGS := -std=c++17 -Wall -Wextra -g -fsanitize=address,undefined
 
-TESTS := test_01 test_02 test_03 test_04 test_05
+TESTS := test_01 test_02 test_03 test_04 test_05 test_06 test_07
 BINS  := $(addprefix tests/,$(TESTS))
 
 .PHONY: all test clean
