@@ -1,5 +1,4 @@
-// AVL = BST balanceado (BBST). Base: semana9/AVL.cpp. Compila SOLO.
-// Mantiene |FB(v)| <= 1 en todo nodo, asi la altura es O(log n) garantizado.
+// AVL (BST balanceado)
 #include <bits/stdc++.h>
 using namespace std;
 

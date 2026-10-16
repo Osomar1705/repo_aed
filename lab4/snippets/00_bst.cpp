@@ -1,5 +1,4 @@
-// BST basico (arbol binario de busqueda). Base: semana6/implementacion.cpp
-// Compila SOLO. Sin balanceo: en el peor caso (datos ordenados) degenera a O(n).
+// BST: insertar, buscar, borrar, recorridos
 #include <bits/stdc++.h>
 using namespace std;
 

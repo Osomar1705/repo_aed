@@ -1,5 +1,4 @@
-// Patrones de recursion. Compila SOLO. En cada una: caso base + paso recursivo.
-// Regla de oro: define el caso base ANTES de llamar, o entras en recursion infinita.
+// recursion: funciones clasicas
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -46,7 +45,6 @@ int bsearch_rec(const vector<int>& a, int lo, int hi, int x) {
 }
 
 // O(2^n) movimientos - Torres de Hanoi: mueve n discos de 'desde' a 'hacia'.
-// Idea: mueve n-1 al auxiliar, mueve el grande, y pon los n-1 encima.
 void hanoi(int n, char desde, char hacia, char aux, vector<pair<char,char>>& pasos) {
     if (n == 0) return;              // caso base: nada que mover
     hanoi(n - 1, desde, aux, hacia, pasos);

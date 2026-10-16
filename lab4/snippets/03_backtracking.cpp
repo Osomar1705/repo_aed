@@ -1,10 +1,7 @@
-// Patrones de backtracking. Compila SOLO.
-// Esquema siempre igual: ELEGIR una opcion -> EXPLORAR (recursion) -> DESHACER.
-// La poda (no seguir ramas invalidas) es lo que lo hace mas rapido que fuerza bruta.
+// backtracking
 #include <bits/stdc++.h>
 using namespace std;
 
-// [SUBCONJUNTOS]
 // O(2^n) - todos los subconjuntos: en cada indice decido incluir o no.
 void subconjuntos(int i, const vector<int>& a, vector<int>& actual, vector<vector<int>>& res) {
     if (i == (int)a.size()) { res.push_back(actual); return; } // caso base: decidi todos
@@ -14,7 +11,6 @@ void subconjuntos(int i, const vector<int>& a, vector<int>& actual, vector<vecto
     actual.pop_back();                           // DESHACER
 }
 
-// [PERMUTACIONES]
 // O(n * n!) - todas las permutaciones usando un arreglo 'usado'.
 void permutaciones(const vector<int>& a, vector<int>& actual, vector<bool>& usado,
                    vector<vector<int>>& res) {
@@ -27,7 +23,6 @@ void permutaciones(const vector<int>& a, vector<int>& actual, vector<bool>& usad
     }
 }
 
-// [COMBINACIONES]
 // O(C(n,k)) - elegir k de {1..n}; 'inicio' evita repetir y fija orden creciente.
 void combinaciones(int n, int k, int inicio, vector<int>& actual, vector<vector<int>>& res) {
     if ((int)actual.size() == k) { res.push_back(actual); return; } // caso base
@@ -38,7 +33,6 @@ void combinaciones(int n, int k, int inicio, vector<int>& actual, vector<vector<
     }
 }
 
-// [PARENTESIS]
 // O(Catalan(n)) - genera todas las combinaciones validas de n pares de parentesis.
 // Poda: solo abro si quedan '(', solo cierro si hay '(' sin cerrar (cerrar<abrir).
 void parentesis(int abrir, int cerrar, int n, string& s, vector<string>& res) {
@@ -47,7 +41,6 @@ void parentesis(int abrir, int cerrar, int n, string& s, vector<string>& res) {
     if (cerrar < abrir) { s.push_back(')'); parentesis(abrir, cerrar + 1, n, s, res); s.pop_back(); }
 }
 
-// [NREINAS]
 // O(n!) aprox - coloca n reinas sin que se ataquen; cuenta soluciones.
 // 'col[f]' = columna de la reina en la fila f. Poda por columna y diagonales.
 bool seguro(int fila, int c, const vector<int>& col) {
